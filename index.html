@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A universe for Ayesha</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,500;1,500;1,700&family=Manrope:wght@400;600&display=swap">
+<link rel="stylesheet" href="style.css"></head><body>
+<canvas id="bg"></canvas>
+<button class="logo" id="logo" aria-label="Ayesha logo">Ayesha ♥</button>
+<button class="mute" id="mute" aria-pressed="false">Effects on</button>
+
+<section class="scr on" id="s-load"><h2>Initializing a special universe...</h2><div class="ring"><svg width="70" height="64" viewBox="0 0 32 29"><path d="M16 28C-6 12 5-2 16 7c11-9 22 5 0 21z" fill="#FF4FA3"/></svg></div><div class="pct" id="pct">0%</div><p id="lmsg">Preparing the stars...</p></section>
+
+<section class="scr" id="s-lock"><h2>Something special is being prepared for you, Ayesha...</h2><p class="serif" style="font-size:1.3rem;color:var(--rose)">Jab tak tum nahi aati, ye aasman bhi intezaar karta hai... 🌙</p><p>This universe opens on your birthday.</p><div id="lk" class="serif" style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin:18px 0" role="timer" aria-live="off"></div><p style="opacity:.7">Come back when the timer reaches zero. ❤️</p></section>
+
+<section class="scr" id="s-gate"><div class="term glass"><div style="animation-delay:.1s">INCOMING TRANSMISSION...</div><div style="animation-delay:.8s">IDENTITY DETECTED: AYESHA</div><div style="animation-delay:1.5s">ACCESS LEVEL: VERY SPECIAL</div><div style="animation-delay:2.2s">MISSION: MAKE HER BIRTHDAY UNFORGETTABLE</div><div class="scan"></div><input id="pw" type="password" placeholder="Enter secret password" aria-label="Secret password" autocomplete="off"><div id="hint" style="opacity:.8;animation:none;font-size:.85rem"></div><p id="err" style="color:var(--pink);min-height:1.5em;margin:4px 0"></p><button class="btn" id="go">Unlock</button></div></section>
+
+<section class="scr" id="s-hub">
+<p class="count" id="cdn"></p>
+<button id="heart" aria-label="Touch the heart"><svg viewBox="0 0 32 29"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF4FA3"/><stop offset="1" stop-color="#9B5CFF"/></linearGradient></defs><path d="M16 28C-6 12 5-2 16 7c11-9 22 5 0 21z" fill="url(#g)"/></svg></button>
+<h1 id="hmsg">Touch the heart</h1>
+<p id="hsub">In a universe of billions of stars, this one was created just for you.</p>
+<div class="glass" id="live" style="max-width:520px;width:100%;margin:12px 0;display:grid;gap:6px;font-size:.92rem"></div>
+<div id="tabs" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px"></div>
+<div class="grid" id="grid"></div>
+<p style="font-size:.8rem;opacity:.6">40 missions, ek grand finale, aur 5 chhupe hue symbols dhoondho ✦</p>
+</section>
+
+<div id="m" role="dialog" aria-modal="true"><div id="mb" class="glass"><button class="x" id="mx" aria-label="Close">×</button><div id="mc"></div></div></div>
+<div id="dark"><div><h1 id="dk"></h1></div></div>
+<div id="fin"><img id="fbg" alt=""><div class="letter" id="fl"></div>
+<div id="chai" style="display:none;margin-top:12px"><svg viewBox="0 0 120 110" width="120" aria-hidden="true" style="display:block;margin:0 auto;filter:drop-shadow(0 0 14px rgba(255,79,163,.5))"><g class="steam"><path d="M45 30c-8-8 8-14 0-24"/><path d="M62 30c-8-8 8-14 0-24"/><path d="M79 30c-8-8 8-14 0-24"/></g><path d="M90 46h8c10 0 10 20 0 20h-9" fill="none" stroke="#FFD78A" stroke-width="5"/><path d="M30 40h60v22c0 18-12 30-30 30S30 80 30 62z" fill="#FFD78A"/><ellipse cx="60" cy="40" rx="30" ry="6" fill="#b5651d"/><path d="M60 80c-14-8-8-18 0-12 8-6 14 4 0 12z" fill="#FF4FA3"/><ellipse cx="60" cy="100" rx="44" ry="7" fill="#FFC5DF"/></svg><div class="serif" id="ct" style="font-size:1.6rem;color:var(--gold);margin:6px 0"></div><button class="btn" id="cy">Haan, chai pe chalein ☕</button> <button class="btn ghost" id="cl2">Baad mein 💕</button></div><div style="margin-top:14px"><button class="btn" id="replay" style="display:none">Replay your universe</button> <button class="btn ghost" id="last" style="display:none">Discover one last secret</button></div></div>
+
+<div class="mp" id="mp"><button id="pp" aria-label="Play or pause music">♪ Play</button><span id="mt"></span><button id="nxs" aria-label="Next song">⏭</button><input id="vol" type="range" min="0" max="1" step=".05" value=".6" aria-label="Music volume"></div>
+<script src="script.js"></script></body></html>
