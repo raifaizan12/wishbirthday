@@ -1,7 +1,7 @@
 
 const C={
  name:"Ayesha",
- birthday:"2026-11-24",        
+ birthday:"2026-11-26",        
  lockUntilBirthday:true,          
  password:"ayesha", hint:"The name of the girl this universe is for.",
  compliments:["Your smile deserves its own galaxy.","You make ordinary moments extraordinary.","If happiness had a name, I would call it Ayesha.","Even the brightest stars have competition when you smile.","Your kindness is quieter than starlight and just as far-reaching.","The world became more beautiful the day you were born.","You are proof that magic doesn't need a spell.","Some people light up a room. You light up the whole sky."],
