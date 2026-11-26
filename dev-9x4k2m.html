@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Developer Console</title>
+<style>
+:root{--bg:#0b0618;--card:#160d2b;--line:#2c1f4d;--tx:#f3eefc;--mut:#a79bc4;--pink:#FF4FA3;--vio:#9B5CFF;--ok:#35d07f;--bad:#ff5a6a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:20px}
+.wrap{max-width:640px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px}
+h2{font-size:16px;margin:0 0 12px;color:var(--pink)}
+.sub{color:var(--mut);margin:0 0 18px;font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
+label{display:block;font-size:13px;color:var(--mut);margin:12px 0 4px}
+input[type=text],input[type=email],input[type=password],input[type=date],textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#0f0820;color:var(--tx);font:inherit}
+textarea{min-height:90px;resize:vertical}
+input:focus,textarea:focus{outline:2px solid var(--vio);border-color:transparent}
+.row{display:flex;align-items:center;gap:10px}
+.btn{border:0;border-radius:10px;padding:11px 18px;font:inherit;font-weight:600;color:#fff;cursor:pointer;background:linear-gradient(135deg,var(--pink),var(--vio))}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--mut)}
+.btn.lock{background:var(--bad)}.btn.unlock{background:var(--ok);color:#06210f}
+.btn:disabled{opacity:.5;cursor:wait}
+.badge{display:inline-block;padding:4px 12px;border-radius:999px;font-weight:700;font-size:13px}
+.badge.on{background:rgba(53,208,127,.15);color:var(--ok)}.badge.off{background:rgba(255,90,106,.15);color:var(--bad)}
+.hint{font-size:12px;color:var(--mut);margin-top:4px}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#fff;color:#111;padding:10px 18px;border-radius:999px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;max-width:90vw}
+#toast.show{opacity:1}
+#toast.err{background:var(--bad);color:#fff}
+.hide{display:none!important}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+</style></head><body>
+<div class="wrap">
+
+<!-- SETUP WARNING -->
+<div id="v-setup" class="card hide">
+  <h2>Setup baqi hai</h2>
+  <p><code>ctl-config.js</code> mein <b>dbUrl</b> aur <b>apiKey</b> bharo. Steps <b>ADMIN-SETUP.txt</b> mein hain.</p>
+</div>
+
+<!-- LOGIN -->
+<div id="v-login" class="card hide">
+  <h1>Developer Console</h1>
+  <p class="sub">Sirf developer ke liye.</p>
+  <label for="em">Email</label>
+  <input id="em" type="email" autocomplete="username">
+  <label for="pw">Password</label>
+  <input id="pw" type="password" autocomplete="current-password">
+  <p id="lerr" style="color:var(--bad);min-height:1.4em;margin:10px 0 0"></p>
+  <button class="btn" id="login" style="margin-top:6px">Login</button>
+</div>
+
+<!-- PANEL -->
+<div id="v-panel" class="hide">
+  <div class="top">
+    <div><h1>Developer Console</h1><p class="sub" id="who"></p></div>
+    <button class="btn ghost" id="logout">Logout</button>
+  </div>
+
+  <div class="card">
+    <h2>Website status</h2>
+    <div class="row" style="justify-content:space-between;margin-bottom:6px">
+      <span id="status" class="badge on">LIVE</span>
+      <a href="index.html" target="_blank" rel="noopener" style="color:var(--mut);font-size:13px">Site kholo &#8599;</a>
+    </div>
+    <label for="lmsg">Lock message (visitors ko ye dikhega)</label>
+    <textarea id="lmsg" placeholder="Website locked / closed by developer.&#10;Please contact the developer."></textarea>
+    <label for="lcon">Developer WhatsApp number (bina +, e.g. 923311065822)</label>
+    <input id="lcon" type="text" inputmode="numeric" placeholder="khali = ctl-config.js wala number">
+    <div class="row" style="margin-top:14px;gap:10px;flex-wrap:wrap">
+      <button class="btn lock" id="toggle">Lock website</button>
+      <button class="btn ghost" id="savemsg">Sirf message save karo</button>
+    </div>
+    <p class="hint">Lock/unlock 10 second ke andar sab visitors par live lag jata hai.</p>
+  </div>
+
+  <div class="card">
+    <h2>Site settings</h2>
+    <p class="hint" style="margin-top:0">Khali chhodo to <code>script.js</code> wali default value use hogi.</p>
+    <label for="s-name">Name</label><input id="s-name" type="text">
+    <label for="s-bd">Birthday date</label><input id="s-bd" type="date">
+    <label class="row" style="margin-top:14px;color:var(--tx)"><input id="s-lock" type="checkbox"> Birthday tak countdown lock rakho</label>
+    <label for="s-pw">Secret password</label><input id="s-pw" type="text" autocomplete="off">
+    <label for="s-hint">Password hint</label><input id="s-hint" type="text">
+    <label for="s-letter">Letter</label><textarea id="s-letter" style="min-height:130px"></textarea>
+    <label for="s-final">Final message</label><textarea id="s-final" style="min-height:130px"></textarea>
+    <div style="margin-top:16px"><button class="btn" id="savecfg">Settings save karo</button></div>
+    <p class="hint">Settings naye visitors ko / page reload par lagti hain.</p>
+  </div>
+</div>
+</div>
+<div id="toast"></div>
+
+<script src="ctl-config.js"></script>
+<script>
+(function(){
+"use strict";
+var cfg=window.CTL_CONFIG||{}, DB=String(cfg.dbUrl||"").replace(/\/+$/,""), KEY=cfg.apiKey||"";
+var $=function(s){return document.querySelector(s)};
+var S=null, site={}, tt;
+
+function view(v){["setup","login","panel"].forEach(function(n){$("#v-"+n).classList.toggle("hide",n!==v)})}
+function toast(m,err){var t=$("#toast");t.textContent=m;t.className="show"+(err?" err":"");clearTimeout(tt);tt=setTimeout(function(){t.className=""},2600)}
+
+/* ---------- auth (Firebase REST) ---------- */
+var ERR={INVALID_LOGIN_CREDENTIALS:"Email ya password galat hai.",EMAIL_NOT_FOUND:"Email galat hai.",INVALID_PASSWORD:"Password galat hai.",
+  TOO_MANY_ATTEMPTS_TRY_LATER:"Bohot koshishein. Thori der baad try karo.",USER_DISABLED:"Account disabled hai."};
+function saveS(){try{sessionStorage.setItem("ctl_s",JSON.stringify(S))}catch(e){}}
+function post(url,body,form){
+  return fetch(url,{method:"POST",headers:{"Content-Type":form?"application/x-www-form-urlencoded":"application/json"},body:body})
+    .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error((d.error&&(d.error.message||d.error))||"Error");return d})})
+}
+function login(email,pw){
+  return post("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key="+encodeURIComponent(KEY),
+    JSON.stringify({email:email,password:pw,returnSecureToken:true})).then(function(d){
+      S={idToken:d.idToken,refreshToken:d.refreshToken,exp:Date.now()+(+d.expiresIn)*1000,email:d.email};saveS()})
+}
+function token(){
+  if(!S)return Promise.reject(new Error("Login karo"));
+  if(Date.now()<S.exp-60000)return Promise.resolve(S.idToken);
+  return post("https://securetoken.googleapis.com/v1/token?key="+encodeURIComponent(KEY),
+    "grant_type=refresh_token&refresh_token="+encodeURIComponent(S.refreshToken),true).then(function(d){
+      S.idToken=d.id_token;S.refreshToken=d.refresh_token;S.exp=Date.now()+(+d.expires_in)*1000;saveS();return S.idToken})
+}
+
+/* ---------- database ---------- */
+function read(){
+  return fetch(DB+"/site.json",{cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("DB read fail ("+r.status+")");return r.json()})
+    .then(function(d){return d&&typeof d==="object"?d:{}})
+}
+function write(method,path,data){
+  return token().then(function(t){
+    return fetch(DB+"/"+path+".json?auth="+encodeURIComponent(t),{method:method,headers:{"Content-Type":"application/json"},body:JSON.stringify(data)})
+  }).then(function(r){
+    if(r.status===401||r.status===403)throw new Error("Permission denied: ye email admin nahi hai ya rules galat hain.");
+    if(!r.ok)throw new Error("Save fail ("+r.status+")");return r.json()
+  })
+}
+
+/* ---------- UI ---------- */
+function paint(){
+  var L=!!site.locked, st=site.settings||{};
+  var b=$("#status");b.textContent=L?"LOCKED":"LIVE";b.className="badge "+(L?"off":"on");
+  var t=$("#toggle");t.textContent=L?"Unlock website":"Lock website";t.className="btn "+(L?"unlock":"lock");
+  $("#lmsg").value=site.lockMessage||"";$("#lcon").value=site.contact||"";
+  $("#s-name").value=st.name||"";$("#s-bd").value=st.birthday||"";$("#s-pw").value=st.password||"";$("#s-hint").value=st.hint||"";
+  $("#s-letter").value=st.letter||"";$("#s-final").value=st.final||"";
+  $("#s-lock").checked=typeof st.lockUntilBirthday==="boolean"?st.lockUntilBirthday:true;
+}
+function openPanel(){
+  $("#who").textContent=S.email||"";
+  read().then(function(d){site=d;paint();view("panel")}).catch(function(e){site={};paint();view("panel");toast(e.message,1)})
+}
+function busy(btn,p){btn.disabled=true;return p.then(function(r){btn.disabled=false;return r},function(e){btn.disabled=false;toast(e.message,1);throw e})}
+
+function lockFields(){
+  return {lockMessage:$("#lmsg").value.trim(),contact:$("#lcon").value.replace(/\D/g,""),updated:Date.now()};
+}
+$("#login").onclick=function(){
+  $("#lerr").textContent="";
+  busy($("#login"),login($("#em").value.trim(),$("#pw").value)).then(openPanel).catch(function(e){$("#lerr").textContent=ERR[e.message]||e.message});
+};
+$("#pw").addEventListener("keydown",function(e){if(e.key==="Enter")$("#login").click()});
+$("#logout").onclick=function(){S=null;try{sessionStorage.removeItem("ctl_s")}catch(e){}$("#pw").value="";view("login")};
+
+$("#toggle").onclick=function(){
+  var next=!site.locked;
+  if(next&&!confirm("Website abhi lock kar dein? Sab visitors ko lock message dikhega."))return;
+  var d=lockFields();d.locked=next;
+  busy($("#toggle"),write("PATCH","site",d)).then(function(){site.locked=next;site.lockMessage=d.lockMessage;site.contact=d.contact;paint();toast(next?"Website LOCKED":"Website LIVE")}).catch(function(){});
+};
+$("#savemsg").onclick=function(){
+  var d=lockFields();
+  busy($("#savemsg"),write("PATCH","site",d)).then(function(){site.lockMessage=d.lockMessage;site.contact=d.contact;toast("Message saved")}).catch(function(){});
+};
+$("#savecfg").onclick=function(){
+  var s={lockUntilBirthday:$("#s-lock").checked};
+  [["name","#s-name"],["birthday","#s-bd"],["password","#s-pw"],["hint","#s-hint"],["letter","#s-letter"],["final","#s-final"]].forEach(function(p){
+    var v=$(p[1]).value.trim();if(v)s[p[0]]=v});
+  busy($("#savecfg"),write("PUT","site/settings",s)).then(function(){site.settings=s;toast("Settings saved")}).catch(function(){});
+};
+
+/* ---------- boot ---------- */
+if(!DB||!KEY){view("setup")}
+else{
+  try{S=JSON.parse(sessionStorage.getItem("ctl_s")||"null")}catch(e){S=null}
+  if(S&&S.refreshToken)openPanel();else view("login");
+}
+})();
+</script>
+</body></html>

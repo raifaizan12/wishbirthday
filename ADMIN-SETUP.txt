@@ -1,0 +1,55 @@
+ADMIN / REMOTE LOCK SETUP  (sirf ek dafa, ~5 minute)
+=====================================================
+
+Kya milta hai
+-------------
+* dev-9x4k2m.html  = hidden admin panel (kisi page par link nahi hai)
+* Admin panel se LIVE: website lock/unlock, lock message, developer
+  WhatsApp, name, birthday, password, hint, letter, final message badalna.
+* Lock hone par visitors ko sirf ye dikhta hai:
+  "Website locked / closed by developer. Please contact the developer."
+
+Step 1 - Firebase project
+-------------------------
+1. https://console.firebase.google.com  -> Add project (free Spark plan kaafi hai)
+2. Build > Realtime Database > Create database (koi bhi region, "locked mode")
+   Upar jo URL dikhta hai wo copy karo (https://xxxx-default-rtdb....)
+3. Build > Authentication > Get started > Sign-in method > Email/Password > Enable
+4. Authentication > Users > Add user -> apna admin email + strong password
+5. Project settings (gear) > General > "Web API Key" copy karo
+
+Step 2 - Rules (Realtime Database > Rules tab, poora replace karo)
+------------------------------------------------------------------
+{
+  "rules": {
+    "site": {
+      ".read": true,
+      ".write": "auth != null && auth.token.email == 'YOUR_ADMIN_EMAIL'"
+    }
+  }
+}
+'YOUR_ADMIN_EMAIL' ki jagah step 1.4 wala email likho. Publish karo.
+(Ye zaroori hai: isi se sirf aap write kar sakte ho.)
+
+Step 3 - ctl-config.js bharo
+----------------------------
+dbUrl  = step 1.2 wala URL
+apiKey = step 1.5 wali key
+Phir poora folder dobara Netlify par deploy karo.
+
+Step 4 - Use
+------------
+Apni site ke link ke end mein  /dev-9x4k2m.html  lagao, login karo.
+* "Lock website"  -> 10 sec ke andar sab visitors par lock screen.
+* "Unlock website" -> wapas normal.
+
+Admin page ka naam badalna chaho (behtar hai) to file rename kar do,
+bas koi us par link na lagao. robots.txt mat banana (usse naam khul jata hai).
+
+Zaroori baatein
+---------------
+* Agar database na mile (net issue) to site normal chalti hai.
+* Lock screen browser-side hai: maqsad casual visitors ko rokna hai.
+  Images/videos ke direct links phir bhi khul sakte hain jo unka URL jaante hon.
+* Settings mein jo password hai wo public-read hai (waise bhi script.js mein
+  tha). Ye sirf birthday gate hai, koi asli secret na rakho.

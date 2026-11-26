@@ -67,6 +67,12 @@ const C={
  bonus:"One last secret: this whole universe was only ever about making you smile."
 };
 
+/* ===== remote settings (admin panel se, control.js ke zariye) ===== */
+try{const R=window.__REMOTE&&window.__REMOTE.settings;if(R&&typeof R==="object"){
+ ["name","password","hint","letter","final"].forEach(k=>{if(typeof R[k]==="string"&&R[k].trim()!=="")C[k]=R[k]});
+ if(typeof R.birthday==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(R.birthday))C.birthday=R.birthday;
+ if(typeof R.lockUntilBirthday==="boolean")C.lockUntilBirthday=R.lockUntilBirthday}}catch(e){}
+
 const $=s=>document.querySelector(s),rnd=(a,b)=>a+Math.random()*(b-a),pick=a=>a[Math.floor(Math.random()*a.length)];
 const COL=["#FF4FA3","#9B5CFF","#FFD78A","#FFC5DF"];
 let P={a:0,g:0,w:0,l:0,s:0,f:0},mute=false,AC=null;
